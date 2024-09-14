@@ -6,75 +6,187 @@ using namespace std;
 
 int main() {
   srand(time(0));
-  int a[5];
-  cout << "введите 5 чисел ";
-  for (int i = 0; i < 5; i++) {
-    cin >> a[i];
+  int m, n;
+  cout << "введите m ";
+  cin >> m;
+  cout << "введите n ";
+  cin >> n;
+  int a[m][n];
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      a[i][j] = rand() % 21; 
+    }
   }
-  cout << "массив в обратном порядке ";
-  for (int i = 4; i > 0; i--) { 
-    cout << a[i] << " ";
-  }
-  cout << "\n";
-  int b[20];
-  for (int i = 0; i < 20; i++) {
-    b[i] = rand() % 100;
-  }
-  cout << "четные элементы ";
-  for (int i = 0; i < 20; i += 2) {
-    cout << b[i] << " ";
-  }
-  cout << "\n";
-  int c[10];
-  int count = 0;
   int sum = 0;
-  for (int i = 0; i < 10; i++) {
-    c[i] = rand() % 41 - 20;
-    if (c[i] > 0) {
-      count++;
-      sum += c[i];
+  int min = a[0][0];
+  int max = a[0][0];
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      sum += a[i][j];
+      if (a[i][j] < min) {
+        min = a[i][j];
+      } 
+      if (a[i][j] > max) {
+        max = a[i][j];
+      }
     }
   }
-  cout << "количество" << count << "\n";
-  cout << "сумма" << sum << "\n";
-  cout << "среднее" << (double)sum / count << "\n";
-  char d[100];
-  int digits = 0, letters = 0, punctuation = 0;
-  for (int i = 0; i <= 100; i++) { 
-    d[i] = rand() % 94 + 33;
-    if (isdigit(d[i])) {
-      digits++;
-    } else if (isalpha(d[i])) {
-      letters++;
-    } else {
-      punctuation++;
+  cout << "сумма " << sum << "\n";
+  cout << "среднее " << (double)sum / (m * n) << "\n";
+  cout << "минимум " << min << "\n";
+  cout << "максимум " << max << "\n";
+  int b[m][m];
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < m; j++) {
+      b[i][j] = rand() % 21;
     }
   }
-  cout << "цифр" << digits << "\n";
-  cout << "букв" << letters << "\n";
-  cout << "знаков пунктуации" << punctuation << "\n";
-  int e[100];
-  int num, counter = 0;
-  cout << "введите число ";
-  cin >> num;
-  for (int i = 0; i < 100; i++) {
-    e[i] = rand() % 100;
-    if (e[i] == num) {
-      counter++;
-    }
-  }
-  cout << "встречается" << counter << " раз\n";
-  int f[20];
   int sum2 = 0;
-  bool foundNegative = false;
-  for (int i = 0; i < 20; i++) {
-    f[i] = rand() % 41 - 10;
-    if (f[i] < 0 && !foundNegative) {
-      foundNegative = true;
-    } else if (foundNegative) {
-      sum2 += f[i];
+  int sum3 = 0;
+  for (int i = 0; i < m; i++) {
+    sum2 += b[i][i];
+    sum3 += b[i][m - i - 1];
+  }
+  cout << "сумма главной диагонали " << sum2 << "\n";
+  cout << "сумма побочной диагонали " << sum3 << "\n";
+  int c[m][n];
+  int positive = 0;
+  int negative = 0;
+  int zero = 0;
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      c[i][j] = rand() % 21 - 10;
+      if (c[i][j] > 0) {
+        positive++;
+      } else if (c[i][j] < 0) {
+        negative++;
+      } else {
+        zero++;
+      }
     }
   }
-  cout << "сумма" << sum2 << "\n";
+  cout << "положительных " << positive << "\n";
+  cout << "отрицательных " << negative << "\n";
+  cout << "нулевых " << zero << "\n";
+  int d[m][n];
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      d[i][j] = rand() % 21;
+    }
+  }
+  for (int i = 0; i < m; i++) {
+    int sum4 = 0;
+    for (int j = 0; j < n; j++) {
+      sum4 += d[i][j];
+    }
+    cout << "сумма строки " << i << " " << sum4 << "\n";
+  }
+  for (int j = 0; j < n; j++) {
+    int sum5 = 0;
+    for (int i = 0; i < m; i++) {
+      sum5 += d[i][j];
+    }
+    cout << "сумма столбца " << j << " " << sum5 << "\n";
+  }
+  int e[m][n];
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      e[i][j] = i * 10 + j; 
+    }
+  }
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      cout << e[i][j] << " ";
+    }
+    cout << "\n";
+  }
+  int f[m][n];
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      f[i][j] = rand() % 21; 
+    }
+  }
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      if (i % 2 == 0) {
+        cout << f[i][j] << " ";
+      }
+    }
+    cout << "\n";
+  }
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      if (i % 2 != 0) {
+        cout << f[i][j] << " ";
+      }
+    }
+    cout << "\n";
+  }
+  int g[m][n];
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      g[i][j] = rand() % 201 - 100; 
+    }
+  }
+  int min2 = g[0][0];
+  int max2 = g[0][0];
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      if (g[i][j] < min2) {
+        min2 = g[i][j];
+      }
+      if (g[i][j] > max2) {
+        max2 = g[i][j];
+      }
+    }
+  }
+  int sum6 = 0;
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      if (g[i][j] >= min2 && g[i][j] <= max2) {
+        sum6 += g[i][j];
+      }
+    }
+  }
+  cout << "сумма " << sum6 << "\n";
+  int h[m][n];
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      h[i][j] = 0;
+    }
+  }
+  int k = 1;
+  int i = m / 2;
+  int j = n / 2;
+  h[i][j] = k;
+  k++;
+  while (k <= m * n) {
+    for (int p = i - 1; p >= 0 && k <= m * n; p--) {
+      h[p][j] = k;
+      k++;
+    }
+    i--;
+    for (int p = j + 1; p < n && k <= m * n; p++) {
+      h[i][p] = k;
+      k++;
+    }
+    j++;
+    for (int p = i + 1; p < m && k <= m * n; p++) {
+      h[p][j] = k;
+      k++;
+    }
+    i++;
+    for (int p = j - 1; p >= 0 && k <= m * n; p--) {
+      h[i][p] = k;
+      k++;
+    }
+    j--;
+  }
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      cout << h[i][j] << " ";
+    }
+    cout << "\n";
+  }
   return 0;
 }

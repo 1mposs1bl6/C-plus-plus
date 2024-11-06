@@ -6,34 +6,24 @@
 
 using namespace std;
 
-class Chaynik {
+class chaynik {
 private:
-    string brand;
-    int power;
-    double volume;
-    bool isOn;
-    bool isBoiling;
+  string material; 
+  int volume;
+  bool isOn;  
 
 public:
-    // геттеры
-    string getBrand() { return brand; }
-    int getPower() { return power; }
-    double getVolume() { return volume; }
-    bool isOn() { return isOn; }
-    bool isBoiling() { return isBoiling; }
+  string getMaterial() { return material; }
+  int getVolume() { return volume; }
+  bool isOn() { return isOn; }
 
-    // сеттеры
-    void setBrand(string newBrand) { brand = newBrand; }
-    void setPower(int newPower) { power = newPower; }
-    void setVolume(double newVolume) { volume = newVolume; }
-    void setIsOn(bool newIsOn) { isOn = newIsOn; }
-    void setIsBoiling(bool newIsBoiling) { isBoiling = newIsBoiling; }
+  void setMaterial(string material) { this->material = material; }
+  void setVolume(int volume) { this->volume = volume; }
+  void setIsOn(bool isOn) { this->isOn = isOn; }
 
-    void turnOn();
-    void turnOff();
-    void heatUp();
-    void pourWater();
-    void describe();
+  void boil();
+  void pour();
+  void describe();
 };
 
 #endif

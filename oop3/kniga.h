@@ -6,33 +6,31 @@
 
 using namespace std;
 
-class Kniga {
+class kniga {
 private:
-    string name;
-    string author;
-    int numberOfPages;
-    bool isOpen;
-    int currentPage;
+  string name;
+  string author;
+  int numberOfPages;
+  bool isOpen;
+  int currentPage;
 
 public:
-    // геттеры
-    string getName() { return name; }
-    string getAuthor() { return author; }
-    int getNumberOfPages() { return numberOfPages; }
-    bool isOpen() { return isOpen; }
-    int getCurrentPage() { return currentPage; }
+  string getName() { return name; }
+  string getAuthor() { return author; }
+  int getNumberOfPages() { return numberOfPages; }
+  bool isOpen() { return isOpen; }
+  int getCurrentPage() { return currentPage; }
 
-    // сеттеры
-    void setName(string newName) { name = newName; }
-    void setAuthor(string newAuthor) { author = newAuthor; }
-    void setNumberOfPages(int newNumberOfPages) { numberOfPages = newNumberOfPages; }
-    void setIsOpen(bool newIsOpen) { isOpen = newIsOpen; }
-    void setCurrentPage(int newCurrentPage) { currentPage = newCurrentPage; }
+  void setName(string name) { this->name = name; }
+  void setAuthor(string author) { this->author = author; }
+  void setNumberOfPages(int numberOfPages) { this->numberOfPages = numberOfPages; }
+  void setIsOpen(bool isOpen) { this->isOpen = isOpen; }
+  void setCurrentPage(int currentPage) { this->currentPage = currentPage; }
 
-    void open();
-    void close();
-    void turnPage();
-    void describe();
+  void open();
+  void close();
+  void turnPage();
+  void describe();
 };
 
 #endif

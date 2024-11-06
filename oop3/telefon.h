@@ -6,33 +6,31 @@
 
 using namespace std;
 
-class Telefon {
+class telefon {
 private:
-    string model;
-    string operatorName;
-    int batteryLevel;
-    bool isPhoneTurnedOn;
-    bool isCurrentlyCalling;
+  string model;
+  string operatorName;
+  int batteryLevel;
+  bool isPhoneTurnedOn;
+  bool isCurrentlyCalling;
 
 public:
-    // геттеры
-    string getModel() { return model; }
-    string getOperatorName() { return operatorName; }
-    int getBatteryLevel() { return batteryLevel; }
-    bool isOn() { return isPhoneTurnedOn; }
-    bool isCalling() { return isCurrentlyCalling; }
+  string getModel() { return model; }
+  string getOperatorName() { return operatorName; }
+  int getBatteryLevel() { return batteryLevel; }
+  bool isOn() { return isPhoneTurnedOn; }
+  bool isCalling() { return isCurrentlyCalling; }
 
-    // сеттеры
-    void setModel(string newModel) { model = newModel; }
-    void setOperatorName(string newOperatorName) { operatorName = newOperatorName; }
-    void setBatteryLevel(int newBatteryLevel) { batteryLevel = newBatteryLevel; }
-    void setIsOn(bool newIsOn) { isPhoneTurnedOn = newIsOn; }
-    void setIsCalling(bool newIsCalling) { isCurrentlyCalling = newIsCalling; }
+  void setModel(string model) { this->model = model; }
+  void setOperatorName(string operatorName) { this->operatorName = operatorName; }
+  void setBatteryLevel(int batteryLevel) { this->batteryLevel = batteryLevel; }
+  void setIsOn(bool isOn) { this->isPhoneTurnedOn = isOn; }
+  void setIsCalling(bool isCalling) { this->isCurrentlyCalling = isCalling; }
 
-    void turnOn();
-    void turnOff();
-    void makeCall();
-    void describe();
+  void turnOn();
+  void turnOff();
+  void makeCall();
+  void describe();
 };
 
 #endif

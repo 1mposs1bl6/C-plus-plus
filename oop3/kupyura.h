@@ -6,27 +6,25 @@
 
 using namespace std;
 
-class Kupyura {
+class kupyura {
 private:
-    int nominal;
-    string currency;
-    bool isWhole;
-    bool isInCirculation;
+  int nominal;
+  string currency;
+  bool isWhole;
+  bool isInCirculation;
 
 public:
-    // геттеры
-    int getNominal() { return nominal; }
-    string getCurrency() { return currency; }
-    bool isWhole() { return isWhole; }
-    bool isInCirculation() { return isInCirculation; }
+  int getNominal() { return nominal; }
+  string getCurrency() { return currency; }
+  bool isWhole() { return isWhole; }
+  bool isInCirculation() { return isInCirculation; }
 
-    // сеттеры
-    void setNominal(int newNominal) { nominal = newNominal; }
-    void setCurrency(string newCurrency) { currency = newCurrency; }
-    void setIsWhole(bool newIsWhole) { isWhole = newIsWhole; }
-    void setIsInCirculation(bool newIsInCirculation) { isInCirculation = newIsInCirculation; }
+  void setNominal(int nominal) { this->nominal = nominal; }
+  void setCurrency(string currency) { this->currency = currency; }
+  void setIsWhole(bool isWhole) { this->isWhole = isWhole; }
+  void setIsInCirculation(bool isInCirculation) { this->isInCirculation = isInCirculation; }
 
-    void describe();
+  void describe();
 };
 
 #endif

@@ -1,28 +1,25 @@
 #include "chaynik.h"
 
-void Chaynik::turnOn() {
-    isOn = true;
-    cout << "чайник включен" << endl;
+void chaynik::boil() {
+  if (isOn) {
+    cout << "чайник уже кипит!" << endl;
+  } else {
+    cout << "чайник закипает..." << endl;
+    isOn = true; 
+  }
 }
 
-void Chaynik::turnOff() {
-    isOn = false;
-    cout << "чайник выключен" << endl;
+void chaynik::pour() {
+  if (isOn) {
+    cout << "чайник кипит, будьте осторожны!" << endl;
+  } else {
+    cout << "чайник пуст." << endl;
+  }
 }
 
-void Chaynik::heatUp() {
-    if (isOn) {
-        isBoiling = true;
-        cout << "вода закипела" << endl;
-    } else {
-        cout << "чайник не включен" << endl;
-    }
-}
-
-void Chaynik::pourWater() {
-    cout << "вода налита в чайник" << endl;
-}
-
-void Chaynik::describe() {
-    cout << "чайник марки " << brand << " с мощностью " << power << " вт, объемом " << volume << " литров" << endl;
+void chaynik::describe() {
+  cout << "чайник из " << material << ", объемом " << volume << " литров." << endl;
+  if (isOn) {
+    cout << "чайник кипит!" << endl;
+  }
 }

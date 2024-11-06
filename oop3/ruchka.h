@@ -6,33 +6,31 @@
 
 using namespace std;
 
-class GelievaiaRuchka {
+class gelievaiaRuchka {
 private:
-    string inkColor;
-    string brand;
-    bool isOpen;
-    bool hasInk;
-    int inkLevel; 
+  string inkColor;
+  string brand;
+  bool isOpen;
+  bool hasInk;
+  int inkLevel; 
 
 public:
-    // геттеры
-    string getInkColor() { return inkColor; }
-    string getBrand() { return brand; }
-    bool isOpen() { return isOpen; }
-    bool hasInk() { return hasInk; }
-    int getInkLevel() { return inkLevel; }
+  string getInkColor() { return inkColor; }
+  string getBrand() { return brand; }
+  bool isOpen() { return isOpen; }
+  bool hasInk() { return hasInk; }
+  int getInkLevel() { return inkLevel; }
 
-    // сеттеры
-    void setInkColor(string newInkColor) { inkColor = newInkColor; }
-    void setBrand(string newBrand) { brand = newBrand; }
-    void setIsOpen(bool newIsOpen) { isOpen = newIsOpen; }
-    void setHasInk(bool newHasInk) { hasInk = newHasInk; }
-    void setInkLevel(int newInkLevel) { inkLevel = newInkLevel; }
+  void setInkColor(string inkColor) { this->inkColor = inkColor; }
+  void setBrand(string brand) { this->brand = brand; }
+  void setIsOpen(bool isOpen) { this->isOpen = isOpen; }
+  void setHasInk(bool hasInk) { this->hasInk = hasInk; }
+  void setInkLevel(int inkLevel) { this->inkLevel = inkLevel; }
 
-    void open();
-    void close();
-    void write();
-    void describe();
+  void open();
+  void close();
+  void write();
+  void describe();
 };
 
 #endif

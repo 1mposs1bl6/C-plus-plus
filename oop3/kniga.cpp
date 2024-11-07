@@ -1,5 +1,15 @@
 #include "kniga.h"
 
+kniga::kniga() : kniga("Название книги", "Автор", 100) {}
+
+kniga::kniga(string name, string author, int numberOfPages) {
+  this->name = name;
+  this->author = author;
+  this->numberOfPages = numberOfPages;
+  this->isOpen = false;
+  this->currentPage = 0;
+}
+
 void kniga::open() {
   isOpen = true;
   cout << "Книга открыта" << endl;

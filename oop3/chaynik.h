@@ -13,6 +13,9 @@ private:
   bool isOn;  
 
 public:
+  chaynik();
+  chaynik(string material, int volume);
+
   string getMaterial() { return material; }
   int getVolume() { return volume; }
   bool isOn() { return isOn; }

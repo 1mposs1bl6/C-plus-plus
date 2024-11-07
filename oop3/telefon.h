@@ -15,6 +15,9 @@ private:
   bool isCurrentlyCalling;
 
 public:
+  telefon();
+  telefon(string model, string operatorName, int batteryLevel);
+
   string getModel() { return model; }
   string getOperatorName() { return operatorName; }
   int getBatteryLevel() { return batteryLevel; }

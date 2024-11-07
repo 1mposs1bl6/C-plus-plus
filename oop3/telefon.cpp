@@ -1,5 +1,15 @@
 #include "telefon.h"
 
+telefon::telefon() : telefon("Модель телефона", "Оператор", 100) {}
+
+telefon::telefon(string model, string operatorName, int batteryLevel) {
+  this->model = model;
+  this->operatorName = operatorName;
+  this->batteryLevel = batteryLevel;
+  this->isPhoneTurnedOn = false;
+  this->isCurrentlyCalling = false;
+}
+
 void telefon::turnOn() {
   isPhoneTurnedOn = true;
   cout << "Телефон включен" << endl;

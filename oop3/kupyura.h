@@ -14,6 +14,9 @@ private:
   bool isInCirculation;
 
 public:
+  kupyura();
+  kupyura(int nominal, string currency, bool isWhole, bool isInCirculation);
+
   int getNominal() { return nominal; }
   string getCurrency() { return currency; }
   bool isWhole() { return isWhole; }

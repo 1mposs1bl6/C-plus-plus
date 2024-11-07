@@ -15,6 +15,9 @@ private:
   int currentPage;
 
 public:
+  kniga();
+  kniga(string name, string author, int numberOfPages);
+
   string getName() { return name; }
   string getAuthor() { return author; }
   int getNumberOfPages() { return numberOfPages; }

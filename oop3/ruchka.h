@@ -15,6 +15,9 @@ private:
   int inkLevel; 
 
 public:
+  gelievaiaRuchka();
+  gelievaiaRuchka(string inkColor, string brand, bool hasInk, int inkLevel);
+
   string getInkColor() { return inkColor; }
   string getBrand() { return brand; }
   bool isOpen() { return isOpen; }

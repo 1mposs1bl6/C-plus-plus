@@ -4,7 +4,6 @@
 #include "telefon.h"
 #include "ruchka.h"
 #include "kupyura.h"
-
 using namespace std;
 
 int main() {
@@ -14,7 +13,7 @@ int main() {
     GelievaiaRuchka ruchka;
     Kupyura kupyura;
 
-    // настройка состояния
+    //настройка состояния
     chaynik.setBrand("Bosch");
     chaynik.setPower(2200);
     chaynik.setVolume(1.5);

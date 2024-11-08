@@ -8,26 +8,32 @@ chaynik::chaynik(string material, int volume) {
   this->isOn = false;
 }
 
+chaynik::chaynik(const chaynik& other) {
+  this->material = other.material;
+  this->volume = other.volume;
+  this->isOn = other.isOn;
+}
+
 void chaynik::boil() {
   if (isOn) {
-    cout << "чайник уже кипит!" << endl;
+    cout << "Чайник уже кипит!" << endl;
   } else {
-    cout << "чайник закипает..." << endl;
-    isOn = true; 
+    cout << "Чайник закипает..." << endl;
+    isOn = true;
   }
 }
 
 void chaynik::pour() {
   if (isOn) {
-    cout << "чайник кипит, будьте осторожны!" << endl;
+    cout << "Чайник кипит, будь осторожен!" << endl;
   } else {
-    cout << "чайник пуст." << endl;
+    cout << "Чайник пуст." << endl;
   }
 }
 
 void chaynik::describe() {
-  cout << "чайник из " << material << ", объемом " << volume << " литров." << endl;
+  cout << "Чайник из " << material << ", объемом " << volume << " литров." << endl;
   if (isOn) {
-    cout << "чайник кипит!" << endl;
+    cout << "Чайник кипит!" << endl;
   }
 }

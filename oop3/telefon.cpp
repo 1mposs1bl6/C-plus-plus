@@ -40,3 +40,44 @@ void telefon::makeCall() {
 void telefon::describe() {
   cout << "Модель: " << model << ", Оператор: " << operatorName << ", Батарея: " << batteryLevel << "%" << endl;
 }
+
+bool telefon::operator==(const telefon& other) const {
+  return (model == other.model && operatorName == other.operatorName && batteryLevel == other.batteryLevel);
+}
+
+bool telefon::operator!=(const telefon& other) const {
+  return !(*this == other);
+}
+
+bool telefon::operator>(const telefon& other) const {
+  return (batteryLevel > other.batteryLevel);
+}
+
+bool telefon::operator<(const telefon& other) const {
+  return (batteryLevel < other.batteryLevel);
+}
+
+ostream& operator<<(ostream& os, const telefon& telefon) {
+  os << "Модель: " << telefon.getModel() << endl;
+  os << "Оператор: " << telefon.getOperatorName() << endl;
+  os << "Батарея: " << telefon.getBatteryLevel() << "%" << endl;
+  return os;
+}
+
+istream& operator>>(istream& is, telefon& telefon) {
+  string model, operatorName;
+  int batteryLevel;
+
+  cout << "Введите модель телефона: ";
+  getline(is, model);
+  cout << "Введите оператора: ";
+  getline(is, operatorName);
+  cout << "Введите уровень заряда батареи: ";
+  is >> batteryLevel;
+
+  telefon.setModel(model);
+  telefon.setOperatorName(operatorName);
+  telefon.setBatteryLevel(batteryLevel);
+
+  return is;
+}

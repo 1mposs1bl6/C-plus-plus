@@ -37,3 +37,40 @@ void chaynik::describe() {
     cout << "Чайник кипит!" << endl;
   }
 }
+
+bool chaynik::operator==(const chaynik& other) const {
+  return (material == other.material && volume == other.volume);
+}
+
+bool chaynik::operator!=(const chaynik& other) const {
+  return !(*this == other);
+}
+
+bool chaynik::operator>(const chaynik& other) const {
+  return (volume > other.volume);
+}
+
+bool chaynik::operator<(const chaynik& other) const {
+  return (volume < other.volume);
+}
+
+ostream& operator<<(ostream& os, const chaynik& chaynik) {
+  os << "Материал: " << chaynik.getMaterial() << endl;
+  os << "Объем: " << chaynik.getVolume() << " литров" << endl;
+  return os;
+}
+
+istream& operator>>(istream& is, chaynik& chaynik) {
+  string material;
+  int volume;
+
+  cout << "Введите материал чайника: ";
+  getline(is, material);
+  cout << "Введите объем чайника: ";
+  is >> volume;
+
+  chaynik.setMaterial(material);
+  chaynik.setVolume(volume);
+
+  return is;
+}

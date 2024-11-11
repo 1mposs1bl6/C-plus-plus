@@ -40,3 +40,44 @@ void kniga::turnPage() {
 void kniga::describe() {
   cout << "Книга " << name << " автора " << author << ", всего страниц: " << numberOfPages << "." << endl;
 }
+
+bool kniga::operator==(const kniga& other) const {
+  return (name == other.name && author == other.author && numberOfPages == other.numberOfPages);
+}
+
+bool kniga::operator!=(const kniga& other) const {
+  return !(*this == other);
+}
+
+bool kniga::operator>(const kniga& other) const {
+  return (numberOfPages > other.numberOfPages);
+}
+
+bool kniga::operator<(const kniga& other) const {
+  return (numberOfPages < other.numberOfPages);
+}
+
+ostream& operator<<(ostream& os, const kniga& kniga) {
+  os << "Название: " << kniga.getName() << endl;
+  os << "Автор: " << kniga.getAuthor() << endl;
+  os << "Количество страниц: " << kniga.getNumberOfPages() << endl;
+  return os;
+}
+
+istream& operator>>(istream& is, kniga& kniga) {
+  string name, author;
+  int numberOfPages;
+
+  cout << "Введите название книги: ";
+  getline(is, name);
+  cout << "Введите автора: ";
+  getline(is, author);
+  cout << "Введите количество страниц: ";
+  is >> numberOfPages;
+
+  kniga.setName(name);
+  kniga.setAuthor(author);
+  kniga.setNumberOfPages(numberOfPages);
+
+  return is;
+}

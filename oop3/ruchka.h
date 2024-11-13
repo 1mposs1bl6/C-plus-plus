@@ -8,7 +8,7 @@ using namespace std;
 
 class gelievaiaRuchka {
 private:
-  string inkColor;
+  char* inkColor;
   string brand;
   bool isOpen;
   bool hasInk;
@@ -16,15 +16,17 @@ private:
 
 public:
   gelievaiaRuchka();
-  gelievaiaRuchka(string inkColor, string brand, bool hasInk, int inkLevel);
+  gelievaiaRuchka(char* inkColor, string brand, bool hasInk, int inkLevel);
+  gelievaiaRuchka(const gelievaiaRuchka& other);
+  ~gelievaiaRuchka();
 
-  string getInkColor() { return inkColor; }
+  char* getInkColor() const;
   string getBrand() { return brand; }
   bool isOpen() { return isOpen; }
   bool hasInk() { return hasInk; }
   int getInkLevel() { return inkLevel; }
 
-  void setInkColor(string inkColor) { this->inkColor = inkColor; }
+  void setInkColor(const char* inkColor);
   void setBrand(string brand) { this->brand = brand; }
   void setIsOpen(bool isOpen) { this->isOpen = isOpen; }
   void setHasInk(bool hasInk) { this->hasInk = hasInk; }
@@ -34,6 +36,13 @@ public:
   void close();
   void write();
   void describe();
+
+  bool operator==(const gelievaiaRuchka& other) const;
+  bool operator!=(const gelievaiaRuchka& other) const;
+  bool operator>(const gelievaiaRuchka& other) const;
+  bool operator<(const gelievaiaRuchka& other) const;
+  friend ostream& operator<<(ostream& os, const gelievaiaRuchka& ruchka);
+  friend istream& operator>>(istream& is, gelievaiaRuchka& ruchka);
 };
 
 #endif

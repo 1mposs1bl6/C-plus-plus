@@ -8,7 +8,7 @@ using namespace std;
 
 class telefon {
 private:
-  string model;
+  char* model;
   string operatorName;
   int batteryLevel;
   bool isPhoneTurnedOn;
@@ -16,15 +16,17 @@ private:
 
 public:
   telefon();
-  telefon(string model, string operatorName, int batteryLevel);
+  telefon(char* model, string operatorName, int batteryLevel);
+  telefon(const telefon& other);
+  ~telefon();
 
-  string getModel() { return model; }
+  char* getModel() const;
   string getOperatorName() { return operatorName; }
   int getBatteryLevel() { return batteryLevel; }
   bool isOn() { return isPhoneTurnedOn; }
   bool isCalling() { return isCurrentlyCalling; }
 
-  void setModel(string model) { this->model = model; }
+  void setModel(const char* model);
   void setOperatorName(string operatorName) { this->operatorName = operatorName; }
   void setBatteryLevel(int batteryLevel) { this->batteryLevel = batteryLevel; }
   void setIsOn(bool isOn) { this->isPhoneTurnedOn = isOn; }
@@ -34,6 +36,13 @@ public:
   void turnOff();
   void makeCall();
   void describe();
+
+  bool operator==(const telefon& other) const;
+  bool operator!=(const telefon& other) const;
+  bool operator>(const telefon& other) const;
+  bool operator<(const telefon& other) const;
+  friend ostream& operator<<(ostream& os, const telefon& telefon);
+  friend istream& operator>>(istream& is, telefon& telefon);
 };
 
 #endif

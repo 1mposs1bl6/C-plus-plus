@@ -2,8 +2,9 @@
 
 kniga::kniga() : kniga("Название книги", "Автор", 100) {} 
 
-kniga::kniga(string name, string author, int numberOfPages) {
-  this->name = name;
+kniga::kniga(char* name, string author, int numberOfPages) {
+  this->name = new char[strlen(name) + 1];
+  strcpy(this->name, name);
   this->author = author;
   this->numberOfPages = numberOfPages;
   isOpen = false;
@@ -11,11 +12,16 @@ kniga::kniga(string name, string author, int numberOfPages) {
 }
 
 kniga::kniga(const kniga& other) {
-  this->name = other.name;
+  this->name = new char[strlen(other.name) + 1];
+  strcpy(this->name, other.name);
   this->author = other.author;
   this->numberOfPages = other.numberOfPages;
   this->isOpen = other.isOpen;
   this->currentPage = other.currentPage;
+}
+
+kniga::~kniga() {
+  delete[] name;
 }
 
 void kniga::open() {
@@ -42,7 +48,7 @@ void kniga::describe() {
 }
 
 bool kniga::operator==(const kniga& other) const {
-  return (name == other.name && author == other.author && numberOfPages == other.numberOfPages);
+  return (strcmp(name, other.name) == 0 && author == other.author && numberOfPages == other.numberOfPages);
 }
 
 bool kniga::operator!=(const kniga& other) const {
@@ -65,11 +71,12 @@ ostream& operator<<(ostream& os, const kniga& kniga) {
 }
 
 istream& operator>>(istream& is, kniga& kniga) {
-  string name, author;
+  char name[100];
+  string author;
   int numberOfPages;
 
   cout << "Введите название книги: ";
-  getline(is, name);
+  is.getline(name, 100);
   cout << "Введите автора: ";
   getline(is, author);
   cout << "Введите количество страниц: ";
@@ -80,4 +87,14 @@ istream& operator>>(istream& is, kniga& kniga) {
   kniga.setNumberOfPages(numberOfPages);
 
   return is;
+}
+
+char* kniga::getName() const {
+  return name; 
+}
+
+void kniga::setName(const char* name) {
+  delete[] this->name;
+  this->name = new char[strlen(name) + 1];
+  strcpy(this->name, name);
 }

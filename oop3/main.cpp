@@ -7,13 +7,12 @@
 using namespace std;
 
 int main() {
-    Chaynik chaynik;
-    Kniga kniga;
-    Telefon telefon;
-    GelievaiaRuchka ruchka;
-    Kupyura kupyura;
+    chaynik chaynik;
+    kniga kniga;
+    telefon telefon;
+    gelievaiaRuchka ruchka;
+    kupyura kupyura;
 
-    //настройка состояния
     chaynik.setBrand("Bosch");
     chaynik.setPower(2200);
     chaynik.setVolume(1.5);
@@ -43,7 +42,6 @@ int main() {
     kupyura.setIsWhole(true);
     kupyura.setIsInCirculation(true);
 
-    // вызов методов
     chaynik.turnOn();
     chaynik.heatUp();
     chaynik.describe();

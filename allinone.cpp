@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <list>
+#include <stdexcept>
 
 using namespace std;
 
@@ -640,18 +642,77 @@ public:
     }
 };
 
-int main() {
-    chaynik myChaynik("пластик", 1);
-    kniga myKniga("Война и мир", "Лев Толстой", 1225);
-    telefon myTelefon("iPhone 13 Pro", "Киевстар", 80);
-    gelievaiaRuchka myRuchka("Синий", "Bic", true, 100);
-    kupyura myKupyura(500, "гривны");
+template <typename T>
+class Stack {
+private:
+    list<T> data;
 
-    cout << "Чайник: " << static_cast<string>(myChaynik) << endl;
-    cout << "Книга: " << static_cast<string>(myKniga) << endl;
-    cout << "Телефон: " << static_cast<string>(myTelefon) << endl;
-    cout << "Ручка: " << static_cast<string>(myRuchka) << endl;
-    cout << "Купюра: " << static_cast<string>(myKupyura) << endl;
+public:
+    void Push(const T& value) {
+        data.push_front(value);
+    }
+
+    void Pop() {
+        if (data.empty()) {
+            cout << "Стек пуст!" << endl;
+        } else {
+            data.pop_front();
+        }
+    }
+
+    T Top() const {
+        if (data.empty()) {
+            throw runtime_error("Стек пуст!");
+        }
+        return data.front();
+    }
+
+    bool Empty() const {
+        return data.empty();
+    }
+
+    bool Contains(const T& value) const {
+        for (const auto& item : data) {
+            if (item == value) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void Print() const {
+        if (data.empty()) {
+            cout << "Стек пуст!" << endl;
+        } else {
+            for (const auto& item : data) {
+                cout << item << " ";
+            }
+            cout << endl;
+        }
+    }
+
+    void PushLessValue(const T& value) {
+        if (data.empty() || value < data.front()) {
+            data.push_front(value);
+        }
+    }
+};
+
+int main() {
+    Stack<int> myStack;
+
+    myStack.Push(10);
+    myStack.Push(20);
+    myStack.Push(30);
+
+    cout << "Стек: ";
+    myStack.Print();
+
+    cout << "Содержит ли стек значение 20? " << (myStack.Contains(20) ? "Да" : "Нет") << endl;
+
+    myStack.PushLessValue(15);
+    cout << "Стек после PushLessValue(15): ";
+    myStack.Print();
 
     return 0;
 }

@@ -93,13 +93,19 @@ public:
         : fontSize(fontSize), fontFamily(fontFamily), bold(bold), italic(italic), underline(underline), fontColor(fontColor) {}
 };
 
-class Button : public Rectangle, public Font {
+class ButtonWithText : public Button, public TextBox {
 public:
-    string text;
-
-    Button(const string& rep, Brush* brush, int fontSize, const string& fontFamily, bool bold, bool italic, bool underline,
-           const string& fontColor, const string& text) 
-        : Rectangle(rep, brush), Font(fontSize, fontFamily, bold, italic, underline, fontColor), text(text) {}
+    ButtonWithText(const string& rep, Brush* brush, int fontSize, const string& fontFamily, bool bold, bool italic, bool underline,
+                   const string& fontColor, const string& buttonText, const string& text)
+        : Button(rep, brush, fontSize, fontFamily, bold, italic, underline, fontColor, buttonText),
+          TextBox(text, Font(fontSize, fontFamily, bold, italic, underline, fontColor)) {}
+    void Display() {
+        cout << "Кнопка с текстом:" << endl;
+        cout << "Текст кнопки: " << Button::text << endl;
+        Button::Display();
+        TextBox::Display();
+    }
+};
 
     void Display() {
         cout << "Кнопка:" << endl;
@@ -128,9 +134,16 @@ int main() {
 
     Font font(12, "Arial", true, false, true, "Черный");
 
-    Button button("Кнопка", &solidBrush, font.fontSize, font.fontFamily, font.bold, font.italic, font.underline, font.fontColor, "Нажми меня");
+    Button button("Кнопка", &solidBrush, font.fontSize, font.fontFamily, font.bold,      font.italic, font.underline, font.fontColor, "Нажми меня");
 
     button.Display();
+    Font font(12, "Arial", true, false, true, "Черный");
 
-    return 0;
+    ButtonWithText buttonWithText("Кнопка с текстом", &solidBrush, font.fontSize,        font.fontFamily, font.bold, font.italic,
+                                         font.underline, font.fontColor, "Нажми          меня", "Дополнительный текст");
+
+        buttonWithText.Display();
+
+        return 0;
+    }
 }

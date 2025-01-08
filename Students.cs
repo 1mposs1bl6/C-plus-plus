@@ -61,5 +61,115 @@ namespace Students
                    $"Домашний адрес: {HomeAddress}\n" +
                    $"Телефонный номер: {PhoneNumber}";
         }
+
+        public double CalculateAverageGrade()
+        {
+            int totalCredits = Credits.Sum();
+            int totalCourseWorks = CourseWorks.Sum();
+            int totalExams = Exams.Sum();
+            int totalGrades = totalCredits + totalCourseWorks + totalExams;
+
+            if (totalGrades == 0)
+            {
+                return 0;
+            }
+
+            return (double)(totalCredits + totalCourseWorks + totalExams) / totalGrades;
+        }
+
+        public static bool operator true(Student student)
+        {
+            return student.CalculateAverageGrade() >= 7;
+        }
+
+        public static bool operator false(Student student)
+        {
+            return student.CalculateAverageGrade() < 7;
+        }
+
+        public static bool operator >(Student student1, Student student2)
+        {
+            return student1.CalculateAverageGrade() > student2.CalculateAverageGrade();
+        }
+
+        public static bool operator <(Student student1, Student student2)
+        {
+            return student1.CalculateAverageGrade() < student2.CalculateAverageGrade();
+        }
+
+        public static bool operator ==(Student student1, Student student2)
+        {
+            if (ReferenceEquals(student1, null) || ReferenceEquals(student2, null))
+            {
+                return ReferenceEquals(student1, student2);
+            }
+
+            return student1.CalculateAverageGrade() == student2.CalculateAverageGrade();
+        }
+
+        public static bool operator !=(Student student1, Student student2)
+        {
+            return !(student1 == student2);
+        }
+    }
+
+    public class Group
+    {
+        public string Name { get; set; }
+        public List<Student> Students { get; set; }
+
+        public Group(string name)
+        {
+            Name = name;
+            Students = new List<Student>();
+        }
+
+        public static bool operator true(Group group)
+        {
+            return group.Students.Count > 0;
+        }
+
+        public static bool operator false(Group group)
+        {
+            return group.Students.Count == 0;
+        }
+
+        public static bool operator >(Group group1, Group group2)
+        {
+            return group1.Students.Count > group2.Students.Count;
+        }
+
+        public static bool operator <(Group group1, Group group2)
+        {
+            return group1.Students.Count < group2.Students.Count;
+        }
+
+        public static bool operator ==(Group group1, Group group2)
+        {
+            if (ReferenceEquals(group1, null) || ReferenceEquals(group2, null))
+            {
+                return ReferenceEquals(group1, group2);
+            }
+
+            return group1.Students.Count == group2.Students.Count;
+        }
+
+        public static bool operator !=(Group group1, Group group2)
+        {
+            return !(group1 == group2);
+        }
+
+        public Student this[int index]
+        {
+            get
+            {
+                if (index < 0 || index >= Students.Count)
+                {
+                    throw new IndexOutOfRangeException();
+                }
+
+                return Students[index];
+            }
+        }
     }
 }

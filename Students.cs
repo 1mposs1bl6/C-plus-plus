@@ -1,16 +1,90 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Students
 {
     public class Student
     {
-        public string LastName { get; set; }
-        public string FirstName { get; set; }
-        public string MiddleName { get; set; }
-        public DateTime DateOfBirth { get; set; }
-        public string HomeAddress { get; set; }
-        public string PhoneNumber { get; set; }
+        private string _lastName;
+        private string _firstName;
+        private string _middleName;
+        private DateTime _dateOfBirth;
+        private string _homeAddress;
+        private string _phoneNumber;
+
+        public string LastName 
+        { 
+            get { return _lastName; } 
+            set 
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentException("Фамилия не может быть пустой или состоять только из пробелов.");
+                }
+                _lastName = value;
+            }
+        }
+        public string FirstName 
+        { 
+            get { return _firstName; } 
+            set 
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentException("Имя не может быть пустым или состоять только из пробелов.");
+                }
+                _firstName = value;
+            }
+        }
+        public string MiddleName 
+        { 
+            get { return _middleName; } 
+            set 
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentException("Отчество не может быть пустым или состоять только из пробелов.");
+                }
+                _middleName = value;
+            }
+        }
+        public DateTime DateOfBirth 
+        { 
+            get { return _dateOfBirth; } 
+            set 
+            {
+                if (value > DateTime.Now)
+                {
+                    throw new ArgumentException("Дата рождения не может быть в будущем.");
+                }
+                _dateOfBirth = value;
+            }
+        }
+        public string HomeAddress 
+        { 
+            get { return _homeAddress; } 
+            set 
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentException("Домашний адрес не может быть пустым или состоять только из пробелов.");
+                }
+                _homeAddress = value;
+            }
+        }
+        public string PhoneNumber 
+        { 
+            get { return _phoneNumber; } 
+            set 
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentException("Телефонный номер не может быть пустым или состоять только из пробелов.");
+                }
+                _phoneNumber = value;
+            }
+        }
 
         public List<int> Credits { get; set; }
         public List<int> CourseWorks { get; set; }
@@ -115,7 +189,19 @@ namespace Students
 
     public class Group
     {
-        public string Name { get; set; }
+        private string _name;
+        public string Name 
+        { 
+            get { return _name; } 
+            set 
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentException("Название группы не может быть пустым или состоять только из пробелов.");
+                }
+                _name = value;
+            }
+        }
         public List<Student> Students { get; set; }
 
         public Group(string name)

@@ -4,7 +4,12 @@ using System.Linq;
 
 namespace Students
 {
-    public class Student
+    public interface ICloneable
+    {
+        object Clone();
+    }
+
+    public class Student : ICloneable
     {
         private string _lastName;
         private string _firstName;
@@ -13,10 +18,10 @@ namespace Students
         private string _homeAddress;
         private string _phoneNumber;
 
-        public string LastName 
-        { 
-            get { return _lastName; } 
-            set 
+        public string LastName
+        {
+            get { return _lastName; }
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
@@ -25,10 +30,10 @@ namespace Students
                 _lastName = value;
             }
         }
-        public string FirstName 
-        { 
-            get { return _firstName; } 
-            set 
+        public string FirstName
+        {
+            get { return _firstName; }
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
@@ -37,10 +42,10 @@ namespace Students
                 _firstName = value;
             }
         }
-        public string MiddleName 
-        { 
-            get { return _middleName; } 
-            set 
+        public string MiddleName
+        {
+            get { return _middleName; }
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
@@ -49,10 +54,10 @@ namespace Students
                 _middleName = value;
             }
         }
-        public DateTime DateOfBirth 
-        { 
-            get { return _dateOfBirth; } 
-            set 
+        public DateTime DateOfBirth
+        {
+            get { return _dateOfBirth; }
+            set
             {
                 if (value > DateTime.Now)
                 {
@@ -61,10 +66,10 @@ namespace Students
                 _dateOfBirth = value;
             }
         }
-        public string HomeAddress 
-        { 
-            get { return _homeAddress; } 
-            set 
+        public string HomeAddress
+        {
+            get { return _homeAddress; }
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
@@ -73,10 +78,10 @@ namespace Students
                 _homeAddress = value;
             }
         }
-        public string PhoneNumber 
-        { 
-            get { return _phoneNumber; } 
-            set 
+        public string PhoneNumber
+        {
+            get { return _phoneNumber; }
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
@@ -185,15 +190,24 @@ namespace Students
         {
             return !(student1 == student2);
         }
+
+        public object Clone()
+        {
+            Student clone = new Student(LastName, FirstName, MiddleName, DateOfBirth, HomeAddress, PhoneNumber);
+            clone.Credits = new List<int>(Credits);
+            clone.CourseWorks = new List<int>(CourseWorks);
+            clone.Exams = new List<int>(Exams);
+            return clone;
+        }
     }
 
-    public class Group
+    public class Group : ICloneable
     {
         private string _name;
-        public string Name 
-        { 
-            get { return _name; } 
-            set 
+        public string Name
+        {
+            get { return _name; }
+            set
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
@@ -256,6 +270,17 @@ namespace Students
 
                 return Students[index];
             }
+        }
+
+        public object Clone()
+        {
+            Group clone = new Group(Name);
+            clone.Students = new List<Student>();
+            foreach (Student student in Students)
+            {
+                clone.Students.Add((Student)student.Clone());
+            }
+            return clone;
         }
     }
 }

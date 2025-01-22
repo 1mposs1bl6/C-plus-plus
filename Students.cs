@@ -191,6 +191,22 @@ namespace Students
             return !(student1 == student2);
         }
 
+        public class SortByAverageGrade : IComparer<Student>
+        {
+            public int Compare(Student x, Student y)
+            {
+                return x.CalculateAverageGrade().CompareTo(y.CalculateAverageGrade());
+            }
+        }
+
+        public class SortByFullName : IComparer<Student>
+        {
+            public int Compare(Student x, Student y)
+            {
+                return string.Compare(x.LastName + " " + x.FirstName + " " + x.MiddleName, y.LastName + " " + y.FirstName + " " + y.MiddleName);
+            }
+        }
+
         public object Clone()
         {
             Student clone = new Student(LastName, FirstName, MiddleName, DateOfBirth, HomeAddress, PhoneNumber);
@@ -201,7 +217,7 @@ namespace Students
         }
     }
 
-    public class Group : ICloneable
+    public class Group : ICloneable, IEnumerable<Student>
     {
         private string _name;
         public string Name
@@ -272,6 +288,19 @@ namespace Students
             }
         }
 
+        public IEnumerator<Student> GetEnumerator()
+        {
+            foreach (Student student in Students)
+            {
+                yield return student;
+            }
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
         public object Clone()
         {
             Group clone = new Group(Name);
@@ -281,6 +310,36 @@ namespace Students
                 clone.Students.Add((Student)student.Clone());
             }
             return clone;
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Создать объект группы и студентов
+            Group group = new Group("Группа 1");
+            group.Students.Add(new Student("Иванов", "Иван", "Иванович", new DateTime(2000, 1, 1), "г. Москва", "+7 (999) 123-45-67", new List<int> { 5, 4, 5 }, new List<int> { 4, 5 }, new List<int> { 5, 4, 5 }));
+            group.Students.Add(new Student("Петров", "Петр", "Петрович", new DateTime(2001, 2, 2), "г. Санкт-Петербург", "+7 (888) 123-45-67", new List<int> { 4, 5, 4 }, new List<int> { 5, 4 }, new List<int> { 4, 5, 4 }));
+            group.Students.Add(new Student("Сидоров", "Сидор", "Сидорович", new DateTime(2002, 3, 3), "г. Новосибирск", "+7 (777) 123-45-67", new List<int> { 3, 4, 3 }, new List<int> { 4, 3 }, new List<int> { 3, 4, 3 }));
+
+            // Выполнить сортировку по среднему баллу
+            group.Students.Sort(new Student.SortByAverageGrade());
+            Console.WriteLine("Сортировка по среднему баллу:");
+            foreach (Student student in group)
+            {
+                Console.WriteLine(student);
+            }
+
+            // Выполнить сортировку по ФИО
+            group.Students.Sort(new Student.SortByFullName());
+            Console.WriteLine("\nСортировка по ФИО:");
+            foreach (Student student in group)
+            {
+                Console.WriteLine(student);
+            }
+
+            Console.ReadKey();
         }
     }
 }

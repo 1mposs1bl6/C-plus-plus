@@ -315,6 +315,8 @@ namespace Students
 
     class Program
     {
+        delegate void MenuAction();
+
         static void Main(string[] args)
         {
             // Создать объект группы и студентов
@@ -323,23 +325,140 @@ namespace Students
             group.Students.Add(new Student("Петров", "Петр", "Петрович", new DateTime(2001, 2, 2), "г. Санкт-Петербург", "+7 (888) 123-45-67", new List<int> { 4, 5, 4 }, new List<int> { 5, 4 }, new List<int> { 4, 5, 4 }));
             group.Students.Add(new Student("Сидоров", "Сидор", "Сидорович", new DateTime(2002, 3, 3), "г. Новосибирск", "+7 (777) 123-45-67", new List<int> { 3, 4, 3 }, new List<int> { 4, 3 }, new List<int> { 3, 4, 3 }));
 
-            // Выполнить сортировку по среднему баллу
-            group.Students.Sort(new Student.SortByAverageGrade());
-            Console.WriteLine("Сортировка по среднему баллу:");
-            foreach (Student student in group)
+            // Создать цепочку делегатов
+            MenuAction[] actions = new MenuAction[]
             {
-                Console.WriteLine(student);
-            }
+                AddStudentToGroup,
+                RemoveStudentFromGroup,
+                ShowExcellentStudents,
+                ShowStudentsWithFailingGrades
+            };
 
-            // Выполнить сортировку по ФИО
-            group.Students.Sort(new Student.SortByFullName());
-            Console.WriteLine("\nСортировка по ФИО:");
-            foreach (Student student in group)
+            while (true)
             {
-                Console.WriteLine(student);
-            }
+                Console.WriteLine("Меню:");
+                Console.WriteLine("0. Добавить студента в группу");
+                Console.WriteLine("1. Удалить студента из группы");
+                Console.WriteLine("2. Показать всех отличников");
+                Console.WriteLine("3. Показать всех студентов, у которых есть двойки по экзаменам");
+                Console.WriteLine("4. Выход");
 
-            Console.ReadKey();
+                Console.Write("Введите номер пункта меню: ");
+                int choice;
+                if (int.TryParse(Console.ReadLine(), out choice) && choice >= 0 && choice <= 4)
+                {
+                    if (choice == 4)
+                    {
+                        break;
+                    }
+
+                    // Вызвать соответствующий метод из цепочки делегатов
+                    actions[choice]();
+                }
+                else
+                {
+                    Console.WriteLine("Неверный ввод. Пожалуйста, введите число от 0 до 4.");
+                }
+
+                Console.WriteLine();
+            }
         }
+
+        static void AddStudentToGroup()
+        {
+            Console.WriteLine("Введите информацию о новом студенте:");
+            Console.Write("Фамилия: ");
+            string lastName = Console.ReadLine();
+            Console.Write("Имя: ");
+            string firstName = Console.ReadLine();
+            Console.Write("Отчество: ");
+            string middleName = Console.ReadLine();
+            Console.Write("Дата рождения (гггг-мм-дд): ");
+            DateTime dateOfBirth;
+            if (DateTime.TryParse(Console.ReadLine(), out dateOfBirth))
+            {
+                Console.Write("Домашний адрес: ");
+                string homeAddress = Console.ReadLine();
+                Console.Write("Телефонный номер: ");
+                string phoneNumber = Console.ReadLine();
+
+                // Создать нового студента
+                Student newStudent = new Student(lastName, firstName, middleName, dateOfBirth, homeAddress, phoneNumber);
+
+                // Добавить студента в группу
+                Program.group.Students.Add(newStudent);
+                Console.WriteLine("Студент добавлен в группу.");
+            }
+            else
+            {
+                Console.WriteLine("Неверный формат даты рождения.");
+            }
+        }
+
+        static void RemoveStudentFromGroup()
+        {
+            if (Program.group.Students.Count == 0)
+            {
+                Console.WriteLine("Группа пуста.");
+                return;
+            }
+
+            Console.WriteLine("Список студентов:");
+            for (int i = 0; i < Program.group.Students.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {Program.group.Students[i].LastName} {Program.group.Students[i].FirstName} {Program.group.Students[i].MiddleName}");
+            }
+
+            Console.Write("Введите номер студента для удаления: ");
+            int studentIndex;
+            if (int.TryParse(Console.ReadLine(), out studentIndex) && studentIndex >= 1 && studentIndex <= Program.group.Students.Count)
+            {
+                // Удалить студента из группы
+                Program.group.Students.RemoveAt(studentIndex - 1);
+                Console.WriteLine("Студент удален из группы.");
+            }
+            else
+            {
+                Console.WriteLine("Неверный номер студента.");
+            }
+        }
+
+        static void ShowExcellentStudents()
+        {
+            if (Program.group.Students.Count == 0)
+            {
+                Console.WriteLine("Группа пуста.");
+                return;
+            }
+
+            Console.WriteLine("Отлично учатся:");
+            foreach (Student student in Program.group.Students)
+            {
+                if (student)
+                {
+                    Console.WriteLine($"{student.LastName} {student.FirstName} {student.MiddleName}");
+                }
+            }
+        }
+
+        static void ShowStudentsWithFailingGrades()
+        {
+            if (Program.group.Students.Count == 0)
+            {
+                Console.WriteLine("Группа пуста.");
+                return;
+            }
+
+            Console.WriteLine("Студенты с двойками по экзаменам:");
+            foreach (Student student in Program.group.Students)
+            {
+                if (student.Exams.Contains(2))
+                {
+                    Console.WriteLine($"{student.LastName} {student.FirstName} {student.MiddleName}");
+                }
+            }
+        }
+
+        static Group group;
     }
 }

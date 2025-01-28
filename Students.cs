@@ -311,6 +311,23 @@ namespace Students
             }
             return clone;
         }
+
+        // Делегат для фильтрации студентов
+        public delegate bool StudentFilter(Student student);
+
+        // Метод фильтрации студентов
+        public List<Student> FilterStudents(StudentFilter filter)
+        {
+            List<Student> filteredStudents = new List<Student>();
+            foreach (Student student in Students)
+            {
+                if (filter(student))
+                {
+                    filteredStudents.Add(student);
+                }
+            }
+            return filteredStudents;
+        }
     }
 
     class Program
@@ -456,6 +473,107 @@ namespace Students
                 {
                     Console.WriteLine($"{student.LastName} {student.FirstName} {student.MiddleName}");
                 }
+            }
+        }
+
+        // Фильтры на анонимных методах
+        static void FilterStudentsByAverageGrade(Group group)
+        {
+            var excellentStudents = group.FilterStudents(delegate(Student s) {
+                return s.CalculateAverageGrade() >= 10;
+            });
+            Console.WriteLine("Студенты-отличники:");
+            foreach (var student in excellentStudents)
+            {
+                Console.WriteLine($"{student.LastName} {student.FirstName} {student.MiddleName}");
+            }
+        }
+
+        static void FilterStudentsByName(Group group)
+        {
+            var studentsWithA = group.FilterStudents(delegate(Student s) {
+                return s.FirstName.StartsWith("А");
+            });
+            Console.WriteLine("Студенты, чьи имена начинаются с буквы \"А\":");
+            foreach (var student in studentsWithA)
+            {
+                Console.WriteLine($"{student.LastName} {student.FirstName} {student.MiddleName}");
+            }
+        }
+
+        static void FilterStudentsByFailingGrades(Group group)
+        {
+            var studentsWithFailingGrades = group.FilterStudents(delegate(Student s) {
+                return s.Exams.Contains(2);
+            });
+            Console.WriteLine("Студенты с двойками по экзаменам:");
+            foreach (var student in studentsWithFailingGrades)
+            {
+                Console.WriteLine($"{student.LastName} {student.FirstName} {student.MiddleName}");
+            }
+        }
+
+        static void FilterStudentsWithoutCredits(Group group)
+        {
+            var studentsWithoutCredits = group.FilterStudents(delegate(Student s) {
+                return s.Credits.Count == 0;
+            });
+            Console.WriteLine("Студенты без оценок за ДЗ:");
+            foreach (var student in studentsWithoutCredits)
+            {
+                Console.WriteLine($"{student.LastName} {student.FirstName} {student.MiddleName}");
+            }
+        }
+
+        // Фильтры на лямбдах
+        static void FilterStudentsByAverageGradeLambda(Group group)
+        {
+            var averageGrade = group.Average(s => s.CalculateAverageGrade());
+            var topStudents = group.FilterStudents(s => s.CalculateAverageGrade() > averageGrade);
+            Console.WriteLine("Студенты с оценкой выше среднего по группе:");
+            foreach (var student in topStudents)
+            {
+                Console.WriteLine($"{student.LastName} {student.FirstName} {student.MiddleName}");
+            }
+        }
+
+        static void FilterStudentsByLongNameLambda(Group group)
+        {
+            var studentsWithLongNames = group.FilterStudents(s => s.FirstName.Length > 5);
+            Console.WriteLine("Студенты с именами длиннее 5 символов:");
+            foreach (var student in studentsWithLongNames)
+            {
+                Console.WriteLine($"{student.LastName} {student.FirstName} {student.MiddleName}");
+            }
+        }
+
+        static void FilterStudentsBySameCreditsLambda(Group group)
+        {
+            var studentsWithSameCredits = group.FilterStudents(s => group.Students.Any(s2 => s2 != s && s.Credits.Count == s2.Credits.Count && s.Credits.All(c => s2.Credits.Contains(c))));
+            Console.WriteLine("Студенты с одинаковыми оценками за ДЗ:");
+            foreach (var student in studentsWithSameCredits)
+            {
+                Console.WriteLine($"{student.LastName} {student.FirstName} {student.MiddleName}");
+            }
+        }
+
+        static void FilterStudentsByEvenCreditsLambda(Group group)
+        {
+            var studentsWithEvenCredits = group.FilterStudents(s => s.Credits.Count % 2 == 0);
+            Console.WriteLine("Студенты с четным количеством оценок за ДЗ:");
+            foreach (var student in studentsWithEvenCredits)
+            {
+                Console.WriteLine($"{student.LastName} {student.FirstName} {student.MiddleName}");
+            }
+        }
+
+        static void FilterStudentsByTotalGradesLambda(Group group)
+        {
+            var studentsWithHighTotalGrades = group.FilterStudents(s => (s.Credits.Sum() + s.CourseWorks.Sum() + s.Exams.Sum()) > 50);
+            Console.WriteLine("Студенты, чья сумма всех оценок больше 50:");
+            foreach (var student in studentsWithHighTotalGrades)
+            {
+                Console.WriteLine($"{student.LastName} {student.FirstName} {student.MiddleName}");
             }
         }
 

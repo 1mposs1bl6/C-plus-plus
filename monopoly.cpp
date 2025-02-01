@@ -3,6 +3,7 @@
 #include <iostream>
 #include <limits>
 #include <random>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -13,7 +14,7 @@ struct Player {
   string name;
   int balance;
   int position;
-  vector<int> properties;
+  set<int> properties; // Используем std::set для хранения уникальных свойств
 };
 
 // Структура для представления свойства
@@ -38,23 +39,24 @@ bool isPropertyAvailable(vector<Property> &properties, int propertyIndex) {
   return !properties[propertyIndex].owned;
 }
 
-// Функция для покупки свойства
-void buyProperty(vector<Property> &properties, Player &player,
-                 int propertyIndex) {
+// Шаблонная функция для покупки свойства
+template <typename T>
+void buyProperty(vector<Property> &properties, T &player, int propertyIndex) {
   if (isPropertyAvailable(properties, propertyIndex) &&
       player.balance >= properties[propertyIndex].price) {
     player.balance -= properties[propertyIndex].price;
     properties[propertyIndex].owned = true;
     properties[propertyIndex].owner = player.position;
-    player.properties.push_back(propertyIndex);
+    player.properties.insert(propertyIndex); // Добавляем свойство в set
     cout << player.name << " купил " << properties[propertyIndex].name << endl;
   } else {
     cout << "Недостаточно средств для покупки." << endl;
   }
 }
 
-// Функция для оплаты аренды
-void payRent(vector<Property> &properties, Player &payer, Player &receiver,
+// Шаблонная функция для оплаты аренды
+template <typename T>
+void payRent(vector<Property> &properties, T &payer, T &receiver,
              int propertyIndex) {
   if (properties[propertyIndex].owned &&
       properties[propertyIndex].owner != payer.position) {
@@ -84,9 +86,10 @@ void tradeProperties(vector<Player> &players, vector<Property> &properties,
                      int player1Index, int player2Index) {
   cout << "Игрок " << players[player1Index].name
        << ", выберите свойство для обмена (введите номер):" << endl;
-  for (int i = 0; i < players[player1Index].properties.size(); i++) {
-    cout << i << ". " << properties[players[player1Index].properties[i]].name
-         << endl;
+  int i = 0;
+  for (auto it = players[player1Index].properties.begin();
+       it != players[player1Index].properties.end(); ++it, ++i) {
+    cout << i << ". " << properties[*it].name << endl;
   }
 
   int property1Index;
@@ -99,9 +102,10 @@ void tradeProperties(vector<Player> &players, vector<Property> &properties,
 
   cout << "Игрок " << players[player2Index].name
        << ", выберите свойство для обмена (введите номер):" << endl;
-  for (int i = 0; i < players[player2Index].properties.size(); i++) {
-    cout << i << ". " << properties[players[player2Index].properties[i]].name
-         << endl;
+  i = 0;
+  for (auto it = players[player2Index].properties.begin();
+       it != players[player2Index].properties.end(); ++it, ++i) {
+    cout << i << ". " << properties[*it].name << endl;
   }
 
   int property2Index;
@@ -113,19 +117,23 @@ void tradeProperties(vector<Player> &players, vector<Property> &properties,
   }
 
   // Обмен свойствами
-  properties[players[player1Index].properties[property1Index]].owner =
-      player2Index;
-  properties[players[player2Index].properties[property2Index]].owner =
-      player1Index;
-  players[player1Index].properties[property1Index] =
-      players[player2Index].properties[property2Index];
-  players[player2Index].properties[property2Index] = property1Index;
+  auto it1 = players[player1Index].properties.begin();
+  advance(it1, property1Index);
+  auto it2 = players[player2Index].properties.begin();
+  advance(it2, property2Index);
 
-  cout << players[player1Index].name << " обменял "
-       << properties[players[player1Index].properties[property1Index]].name
-       << " на "
-       << properties[players[player2Index].properties[property2Index]].name
-       << " у " << players[player2Index].name << endl;
+  properties[*it1].owner = player2Index;
+  properties[*it2].owner = player1Index;
+
+  // Обмен свойствами в set
+  players[player1Index].properties.erase(it1);
+  players[player2Index].properties.erase(it2);
+  players[player1Index].properties.insert(*it2);
+  players[player2Index].properties.insert(*it1);
+
+  cout << players[player1Index].name << " обменял " << properties[*it1].name
+       << " на " << properties[*it2].name << " у " << players[player2Index].name
+       << endl;
 }
 
 int main() {
@@ -292,7 +300,7 @@ int main() {
           // Удаление игрока из игры
           players.erase(players.begin() + i);
           // Перенос собственности обанкротившегося игрока
-          for (int propertyIndex : players[i].properties) {
+          for (auto propertyIndex : players[i].properties) {
             properties[propertyIndex].owned = false;
             properties[propertyIndex].owner = -1;
           }

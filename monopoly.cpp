@@ -6,6 +6,7 @@
 #include <set>
 #include <string>
 #include <vector>
+#include <fstream>
 
 using namespace std;
 
@@ -136,6 +137,165 @@ void tradeProperties(vector<Player> &players, vector<Property> &properties,
        << endl;
 }
 
+// Функция для сериализации данных игры в JSON
+string serializeGameData(const vector<Player>& players, const vector<Property>& properties) {
+    string json = "{\n  \"players\": [\n";
+
+    // Сериализация игроков
+    for (size_t i = 0; i < players.size(); ++i) {
+        json += "    {\n";
+        json += "      \"name\": \"" + players[i].name + "\",\n";
+        json += "      \"balance\": " + to_string(players[i].balance) + ",\n";
+        json += "      \"position\": " + to_string(players[i].position) + ",\n";
+        json += "      \"properties\": [";
+
+        // Сериализация свойств игрока
+        bool first = true;
+        for (int propIndex : players[i].properties) {
+            if (!first) json += ",";
+            json += to_string(propIndex);
+            first = false;
+        }
+        json += "]\n    }";
+        if (i < players.size() - 1) json += ",";
+        json += "\n";
+    }
+
+    json += "  ],\n  \"properties\": [\n";
+
+    // Сериализация свойств
+    for (size_t i = 0; i < properties.size(); ++i) {
+        json += "    {\n";
+        json += "      \"name\": \"" + properties[i].name + "\",\n";
+        json += "      \"price\": " + to_string(properties[i].price) + ",\n";
+        json += "      \"rent\": " + to_string(properties[i].rent) + ",\n";
+        json += "      \"owned\": " + (properties[i].owned ? "true" : "false") + ",\n";
+        json += "      \"owner\": " + to_string(properties[i].owner) + "\n";
+        json += "    }";
+        if (i < properties.size() - 1) json += ",";
+        json += "\n";
+    }
+
+    json += "  ]\n}";
+    return json;
+}
+
+// Функция для десериализации JSON в данные игры
+void deserializeGameData(const string& json, vector<Player>& players, vector<Property>& properties) {
+    players.clear();
+    properties.clear();
+
+    size_t pos = 0;
+
+    // Поиск начала массива игроков
+    pos = json.find("\"players\":", pos);
+    pos = json.find("[", pos);
+
+    // Парсинг игроков
+    while (pos != string::npos && json[pos] != ']') {
+        pos = json.find("{", pos);
+        if (pos == string::npos) break;
+
+        Player player;
+
+        // Парсинг имени
+        pos = json.find("\"name\":", pos);
+        pos = json.find("\"", pos + 7) + 1;
+        size_t endPos = json.find("\"", pos);
+        player.name = json.substr(pos, endPos - pos);
+
+        // Парсинг баланса
+        pos = json.find("\"balance\":", pos);
+        pos = json.find_first_of("0123456789", pos);
+        player.balance = stoi(json.substr(pos));
+
+        // Парсинг позиции
+        pos = json.find("\"position\":", pos);
+        pos = json.find_first_of("0123456789", pos);
+        player.position = stoi(json.substr(pos));
+
+        // Парсинг свойств
+        pos = json.find("\"properties\":", pos);
+        pos = json.find("[", pos);
+        while (pos != string::npos && json[pos] != ']') {
+            pos = json.find_first_of("0123456789", pos);
+            if (pos == string::npos || json[pos] == ']') break;
+            size_t propEndPos = json.find_first_not_of("0123456789", pos);
+            int propIndex = stoi(json.substr(pos, propEndPos - pos));
+            player.properties.insert(propIndex);
+            pos = propEndPos;
+        }
+
+        players.push_back(player);
+        pos = json.find("}", pos);
+    }
+
+    // Поиск начала массива свойств
+    pos = json.find("\"properties\":", pos);
+    pos = json.find("[", pos);
+
+    // Парсинг свойств
+    while (pos != string::npos && json[pos] != ']') {
+        pos = json.find("{", pos);
+        if (pos == string::npos) break;
+
+        Property property;
+
+        // Парсинг имени
+        pos = json.find("\"name\":", pos);
+        pos = json.find("\"", pos + 7) + 1;
+        size_t endPos = json.find("\"", pos);
+        property.name = json.substr(pos, endPos - pos);
+
+        // Парсинг цены
+        pos = json.find("\"price\":", pos);
+        pos = json.find_first_of("0123456789", pos);
+        property.price = stoi(json.substr(pos));
+
+        // Парсинг ренты
+        pos = json.find("\"rent\":", pos);
+        pos = json.find_first_of("0123456789", pos);
+        property.rent = stoi(json.substr(pos));
+
+        // Парсинг владения
+        pos = json.find("\"owned\":", pos);
+        pos += 8;
+        property.owned = (json.substr(pos, 4) == "true");
+
+        // Парсинг владельца
+        pos = json.find("\"owner\":", pos);
+        pos = json.find_first_of("-0123456789", pos);
+        property.owner = stoi(json.substr(pos));
+
+        properties.push_back(property);
+        pos = json.find("}", pos);
+    }
+}
+
+void saveGameData(const vector<Player>& players, const vector<Property>& properties, const string& filename) {
+    string jsonData = serializeGameData(players, properties);
+    ofstream outfile(filename);
+    if (outfile.is_open()) {
+        outfile << jsonData;
+        outfile.close();
+        cout << "Данные игры сохранены в " << filename << endl;
+    } else {
+        cout << "Невозможно открыть файл для записи." << endl;
+    }
+}
+
+void loadGameData(vector<Player>& players, vector<Property>& properties, const string& filename) {
+    ifstream infile(filename);
+    if (infile.is_open()) {
+        string jsonData((istreambuf_iterator<char>(infile)), istreambuf_iterator<char>());
+        infile.close();
+        deserializeGameData(jsonData, players, properties);
+        cout << "Данные игры загружены из " << filename << endl;
+    } else {
+        cout << "Невозможно открыть файл для чтения." << endl;
+    }
+}
+
 int main() {
   srand(time(0));
 
@@ -184,6 +344,9 @@ int main() {
       {"Boardwalk", 400, 55, false, -1},
       {"Тюрьма", 0, 0, false, -1}, // Добавление тюрьмы
   };
+
+  // Загрузить игровые данные
+  loadGameData(players, properties, "game_data.txt");
 
   // Основной цикл игры
   while (true) {
@@ -313,6 +476,9 @@ int main() {
         }
       }
     }
+
+    // Сохранение игровых данных
+    saveGameData(players, properties, "game_data.txt");
   }
 
   return 0;

@@ -7,6 +7,57 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <memory>
+
+// Singleton для управления игрой
+class GameManager {
+private:
+    static GameManager* instance;
+    vector<Player> players;
+    vector<Property> properties;
+    
+    // Приватный конструктор
+    GameManager() {}
+    
+public:
+    // Запрещаем копирование
+    GameManager(const GameManager&) = delete;
+    GameManager& operator=(const GameManager&) = delete;
+    
+    static GameManager* getInstance() {
+        if (instance == nullptr) {
+            instance = new GameManager();
+        }
+        return instance;
+    }
+    
+    void initGame() {
+        players = {
+            {"Игрок 1", 1500, 0, {}},
+            {"Игрок 2", 1500, 0, {}}
+        };
+        
+        properties = {
+            {"Mediterranean Avenue", 60, 2, false, -1},
+            {"Baltic Avenue", 60, 4, false, -1},
+            // ... остальные свойства
+        };
+    }
+    
+    vector<Player>& getPlayers() { return players; }
+    vector<Property>& getProperties() { return properties; }
+    
+    void saveGame() {
+        saveGameData(players, properties, "game_data.txt");
+    }
+    
+    void loadGame() {
+        loadGameData(players, properties, "game_data.txt");
+    }
+};
+
+// Инициализация статического члена
+GameManager* GameManager::instance = nullptr;
 
 using namespace std;
 
